@@ -31,3 +31,16 @@ class PersonnelSerializer(serializers.ModelSerializer):
 
     def get_days_since_joined(self, obj):
         return (now() - obj.start_date).days
+
+
+class DepartmentPersonnelSeriaizer(serializers.ModelSerializer):
+
+    personnel_count = serializers.SerializerMethodField()
+    personals = PersonnelSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Department
+        fields = ('id', 'name', 'personnel_count', 'personals')
+
+    def get_personnel_count(self, obj):
+        return obj.personals.count()

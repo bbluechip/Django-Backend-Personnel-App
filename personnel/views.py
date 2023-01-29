@@ -69,3 +69,20 @@ class PersonalGetUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
                 'message': 'You are not authorizated to perform this action'
             }
             return Response(data, status=status.HTTP_401_UNAUTHORIZED)
+
+
+class DepartmentPersonnelView(generics.ListAPIView):
+    serializer_class = DepartmentPersonnelSeriaizer
+    queryset = Department.objects.all()
+
+    def get_queryset(self):
+        name = self.kwargs['department']
+        return Department.objects.filter(name__iexact=name)
+
+# other way of getting data from departments -not specified-
+
+
+class Custom(generics.RetrieveAPIView):
+    serializer_class = DepartmentPersonnelSeriaizer
+    queryset = Department.objects.all()
+    lookup_field = 'name'
